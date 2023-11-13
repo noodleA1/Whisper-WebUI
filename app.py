@@ -2,7 +2,7 @@ import gradio as gr
 import os
 import argparse
 
-from modules.whisper_Inference import WhisperInference
+#from modules.whisper_Inference import WhisperInference
 from modules.faster_whisper_inference import FasterWhisperInference
 from modules.nllb_inference import NLLBInference
 from ui.htmls import *
@@ -13,7 +13,7 @@ class App:
     def __init__(self, args):
         self.args = args
         self.app = gr.Blocks(css=CSS, theme=self.args.theme)
-        self.whisper_inf = WhisperInference() if self.args.disable_faster_whisper else FasterWhisperInference() 
+        #self.whisper_inf = WhisperInference() if self.args.disable_faster_whisper else FasterWhisperInference() 
         if isinstance(self.whisper_inf, FasterWhisperInference):
             print("Use Faster Whisper implementation")
         else:
