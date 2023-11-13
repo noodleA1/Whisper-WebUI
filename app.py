@@ -175,6 +175,37 @@ class App:
                     btn_openfolder.click(fn=lambda: self.open_folder(os.path.join("outputs", "translations")),
                                          inputs=None,
                                          outputs=None)
+        # New tab for video analysis and editing
+        with gr.TabItem("Video Analysis and Editing"):
+            with gr.Row():
+                video_input = gr.Video(label="Upload Video or Enter URL", type=["video", "url"])
+            with gr.Row():
+                analyze_button = gr.Button("Analyze Video")
+            with gr.Row():
+                recommendations_output = gr.Textbox(label="Recommended Edits", placeholder="Recommended edits will appear here...", lines=10)
+            with gr.Row():
+                apply_edits_checkbox = gr.Checkbox(label="Apply edits to video")
+                edit_button = gr.Button("Apply Edits")
+            with gr.Row():
+                edited_video_output = gr.Video(label="Edited Video", visible=False)
+
+        # Backend logic for video analysis and editing
+        def analyze_video(video_input):
+            # Logic to handle video upload or URL processing
+            # Integrate FasterWhisperInference for transcription
+            # Content analysis to identify sections for edits
+            # Generate recommendations for edits
+            # Return recommendations
+            pass
+
+        def apply_edits(video_input, apply_edits):
+            # If apply_edits is True, apply the recommended edits to the video
+            # Return the edited video or the original video with recommendations
+            pass
+
+        # Bind functions to Gradio interface
+        analyze_button.click(analyze_video, inputs=[video_input], outputs=[recommendations_output])
+        edit_button.click(apply_edits, inputs=[video_input, apply_edits_checkbox], outputs=[edited_video_output])
 
         # Launch the app with optional gradio settings
         launch_args = {}
