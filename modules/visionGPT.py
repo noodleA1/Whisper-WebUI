@@ -64,6 +64,37 @@ def frames_to_story(base64Frames, prompt):
     print(result.choices[0].message.content)
     return result.choices[0].message.content
 
+def video_to_frames_and_audio(video_file):
+     # Save the uploaded video file to a temporary file
+     with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmpfile:
+         tmpfile.write(video_file.read())
+         video_filename = tmpfile.name
+
+     # Extract video and audio
+     video_clip = VideoFileClip(video_filename)
+     video_duration = video_clip.duration
+     audio = video_clip.audio
+     base64Frames = []
+     audio_frames = []
+
+     # Extract frames from video
+     video = cv2.VideoCapture(video_filename)
+     while video.isOpened():
+         success, frame = video.read()
+         if not success:
+             break
+         _, buffer = cv2.imencode(".jpg", frame)
+         base64Frames.append(base64.b64encode(buffer).decode("utf-8"))
+
+     # Extract audio frames
+     for frame in audio.iter_frames():
+         audio_frames.append(frame)
+
+     video.release()
+     audio.close()
+     print(len(base64Frames), "video frames read.")
+     print(len(audio_frames), "audio frames read.")
+     return base64Frames, audio_frames, video_filename, video_duration
 
 def text_to_audio(text):
     response = requests.post(
